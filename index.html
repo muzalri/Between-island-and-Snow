@@ -89,13 +89,7 @@
         }
 
         .padlock-glow {
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 180px; height: 180px;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(49,130,189,0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: glowPulse 2s ease-in-out infinite;
+            display: none;
         }
 
         .padlock-svg {
@@ -107,22 +101,23 @@
         }
 
         .padlock-svg .shackle-path {
-            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            transform-origin: 105px 95px;
+            transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
+        /* Step 1: Shackle springs UPWARD like a real padlock opening */
         .padlock-wrapper.unlocking .shackle-path {
-            transform: rotate(-40deg) translateY(-18px);
+            animation: shackleSpringUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
+        /* Step 2: Fully open */
         .padlock-wrapper.unlocked-full {
             transform: scale(1.1);
             filter: brightness(1.3);
         }
 
         .padlock-wrapper.unlocked-full .shackle-path {
-            transform: rotate(-40deg) translateY(-18px);
-            opacity: 0.5;
+            transform: translateY(-32px);
+            opacity: 0.7;
         }
 
         .padlock-wrapper.fly-away {
@@ -131,33 +126,8 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Keyhole glow on unlock */
         .keyhole-glow {
-            position: absolute;
-            top: 58%; left: 50%;
-            width: 0; height: 0;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(255,215,0,0.8) 0%, rgba(255,215,0,0) 70%);
-            border-radius: 50%;
-            z-index: 3;
-            transition: all 0.6s ease;
-            pointer-events: none;
-        }
-
-        .padlock-wrapper.unlocking .keyhole-glow {
-            width: 100px; height: 100px;
-            background: radial-gradient(circle, rgba(255,215,0,0.9) 0%, rgba(255,215,0,0) 70%);
-        }
-
-        .padlock-wrapper.unlocked-full .keyhole-glow {
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,215,0,0.3) 40%, rgba(49,130,189,0) 70%);
-        }
-
-        .padlock-wrapper.fly-away .keyhole-glow {
-            width: 600px; height: 600px;
-            opacity: 0;
-            transition: all 1s ease;
+            display: none;
         }
 
         /* Heart burst from keyhole */
@@ -202,29 +172,8 @@
             opacity: 0;
         }
 
-        /* Glow ring animation for unlock */
         .glow-ring {
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 0; height: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            border: 3px solid rgba(255, 215, 0, 0.6);
-            pointer-events: none;
-            z-index: 3;
-            opacity: 0;
-            transition: all 0.8s ease;
-        }
-
-        .padlock-wrapper.unlocking .glow-ring {
-            width: 200px; height: 200px;
-            opacity: 1;
-        }
-
-        .padlock-wrapper.unlocked-full .glow-ring {
-            width: 350px; height: 350px;
-            opacity: 0;
-            border-color: rgba(49, 130, 189, 0.3);
+            display: none;
         }
 
         .padlock-wrapper.shake {
@@ -829,17 +778,29 @@
         }
 
         @keyframes unlockBounce {
-            0% { transform: scale(1); }
-            30% { transform: scale(1.15); }
-            50% { transform: scale(0.95); }
-            70% { transform: scale(1.08); }
-            100% { transform: scale(1.1); }
+            0% { transform: scale(1) rotate(0deg); }
+            15% { transform: scale(1.08) rotate(-2deg); }
+            30% { transform: scale(1.15) rotate(0deg); }
+            50% { transform: scale(0.97) rotate(1deg); }
+            70% { transform: scale(1.08) rotate(0deg); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* Shackle springs upward with bounce */
+        @keyframes shackleSpringUp {
+            0% { transform: translateY(0); }
+            20% { transform: translateY(-5px); }
+            40% { transform: translateY(-38px); }
+            55% { transform: translateY(-28px); }
+            70% { transform: translateY(-35px); }
+            85% { transform: translateY(-30px); }
+            100% { transform: translateY(-32px); }
         }
 
         @keyframes successPulse {
-            0% { box-shadow: 0 0 0 0 rgba(255,215,0,0.5); }
-            50% { box-shadow: 0 0 30px 15px rgba(255,215,0,0.2); }
-            100% { box-shadow: 0 0 0 0 rgba(255,215,0,0); }
+            0% { transform: scale(1.1); filter: brightness(1.3); }
+            50% { transform: scale(1.15); filter: brightness(1.5); }
+            100% { transform: scale(1.1); filter: brightness(1.3); }
         }
 
         @keyframes glowPulse {
@@ -985,7 +946,7 @@
                     </filter>
                 </defs>
 
-                <!-- Shackle -->
+                <!-- Shackle (single U-shape, lifts upward on unlock) -->
                 <path class="shackle-path" d="M45 95 V55 C45 30, 105 30, 105 55 V95"
                       stroke="url(#shackleGrad)" stroke-width="12" stroke-linecap="round" fill="none"/>
 
@@ -1052,7 +1013,7 @@
             <p class="section-subtitle reveal">Two little characters from different worlds, brought together by love</p>
 
             <div class="mascot-image-container reveal">
-                <img src="mascot.png" alt="Lolo and Jojo" onerror="this.style.display='none'">
+                <img src="mascot.jpg" alt="Lolo and Jojo">
             </div>
 
             <div class="mascot-cards">
@@ -1160,14 +1121,14 @@
         <!-- Footer -->
         <footer class="footer">
             <p class="names">Lolo 🌺 & Jojo ❄️</p>
-            <p>Between Island and Snow — Since August 22, 2004</p>
+            <p>Between Island and Snow — Since September 9, 2025</p>
         </footer>
     </div>
 
     <script>
         // ============ CONFIG ============
         const CORRECT_PASSWORD = '1234';
-        const ANNIVERSARY_DATE = new Date(2004, 7, 22); // August 22, 2004
+        const ANNIVERSARY_DATE = new Date(2025, 8, 9); // September 9, 2025
 
         // ============ LOCK SCREEN PARTICLES ============
         function createLockParticles() {
@@ -1223,42 +1184,46 @@
                 // IMPORTANT: Freeze padlock visible before stopping animation
                 padlock.classList.add('anim-ready');
 
-                // Step 1 (300ms): Bounce + Shackle opens + keyhole glow + hearts
+                // Step 1 (200ms): Padlock bounces, shackle springs upward
                 setTimeout(() => {
-                    padlock.style.animation = 'unlockBounce 0.6s ease forwards';
+                    padlock.style.animation = 'unlockBounce 0.8s ease forwards';
                     padlock.classList.add('unlocking');
-                    createHeartBurst();
-                }, 300);
+                }, 200);
 
-                // Step 2 (1000ms): Sparkles & confetti burst from padlock
+                // Step 2 (700ms): Heart burst + keyhole glow
+                setTimeout(() => {
+                    createHeartBurst();
+                }, 700);
+
+                // Step 3 (1200ms): Sparkles & confetti burst from padlock
                 setTimeout(() => {
                     createSparkles();
                     createConfetti();
-                }, 1000);
+                }, 1200);
 
-                // Step 3 (1600ms): Full glow expansion
+                // Step 4 (1800ms): Full glow, shackle fully lifted
                 setTimeout(() => {
                     padlock.classList.add('unlocked-full');
                     padlock.style.animation = 'successPulse 0.8s ease';
-                }, 1600);
+                }, 1800);
 
-                // Step 4 (2400ms): Padlock flies away
+                // Step 5 (2600ms): Padlock flies away
                 setTimeout(() => {
                     padlock.classList.add('fly-away');
-                }, 2400);
+                }, 2600);
 
-                // Step 5 (3000ms): Fade lock screen
+                // Step 6 (3200ms): Fade lock screen
                 setTimeout(() => {
                     lockScreen.classList.add('unlocked');
-                }, 3000);
+                }, 3200);
 
-                // Step 6 (4200ms): Show dashboard
+                // Step 7 (4400ms): Show dashboard
                 setTimeout(() => {
                     lockScreen.classList.add('hidden');
                     dashboard.classList.add('visible');
                     initDashboard();
                     createFloatingElements();
-                }, 4200);
+                }, 4400);
 
             } else {
                 errorMsg.textContent = 'Wrong password, try again 💔';
