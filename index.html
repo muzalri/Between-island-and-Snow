@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Between Island and Snow</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/globe.gl"></script>
     <style>
         :root {
             --blue: #3182BD;
@@ -511,7 +512,26 @@
             transform: translate(30%, -30%);
         }
 
-        .mascot-emoji { font-size: 3rem; margin-bottom: 1rem; }
+        .mascot-emoji {
+            margin-bottom: 1rem;
+        }
+
+        .mascot-emoji img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #f0f4f8;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .mascot-card.lolo .mascot-emoji img {
+            border-color: var(--pink-light);
+        }
+
+        .mascot-card.jojo .mascot-emoji img {
+            border-color: var(--blue-light);
+        }
 
         .mascot-name {
             font-family: 'Playfair Display', serif;
@@ -621,6 +641,139 @@
             font-size: 0.88rem;
             color: #777;
             line-height: 1.6;
+        }
+
+        /* ====== GLOBE DISTANCE SECTION ====== */
+        .globe-section {
+            padding: 5rem 2rem 3rem;
+            text-align: center;
+            background: linear-gradient(180deg, #0a1628 0%, #0d2137 40%, #132d4a 70%, #0a1628 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .globe-section .section-title {
+            color: #e0eaf5;
+        }
+
+        .globe-section .section-subtitle {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .globe-container {
+            width: 100%;
+            max-width: 700px;
+            height: 500px;
+            margin: 0 auto 2rem;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        #globe-viz {
+            width: 100%;
+            height: 100%;
+        }
+
+        #globe-viz canvas {
+            outline: none;
+        }
+
+        .distance-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .distance-card {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+        }
+
+        .distance-icon {
+            font-size: 2rem;
+        }
+
+        .distance-place h4 {
+            color: #e0eaf5;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+        }
+
+        .distance-place p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+        }
+
+        .distance-line {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .distance-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--pink);
+            box-shadow: 0 0 8px var(--pink);
+        }
+
+        .distance-line .distance-dot:last-child {
+            background: var(--blue-light);
+            box-shadow: 0 0 8px var(--blue-light);
+        }
+
+        .distance-dash {
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--pink), var(--blue-light));
+            opacity: 0.5;
+        }
+
+        .distance-value {
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            white-space: nowrap;
+            text-shadow: 0 0 20px rgba(49,130,189,0.5);
+        }
+
+        .distance-quote {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto 1rem;
+            line-height: 1.7;
+        }
+
+        .distance-date {
+            color: rgba(255,255,255,0.35);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 600px) {
+            .globe-container {
+                height: 350px;
+            }
+            .distance-info {
+                flex-direction: column;
+            }
+            .distance-line {
+                transform: rotate(90deg);
+                margin: 0.5rem 0;
+            }
         }
 
         /* ====== COUNTDOWN SECTION ====== */
@@ -1018,7 +1171,7 @@
 
             <div class="mascot-cards">
                 <div class="mascot-card lolo reveal">
-                    <div class="mascot-emoji">🌺🐭</div>
+                    <div class="mascot-emoji"><img src="lolo.jpg" alt="Lolo"></div>
                     <h3 class="mascot-name">Lolo</h3>
                     <span class="mascot-title-tag">The Island Girl</span>
                     <div class="mascot-stats">
@@ -1033,7 +1186,7 @@
                 </div>
 
                 <div class="mascot-card jojo reveal">
-                    <div class="mascot-emoji">❄️🐱</div>
+                    <div class="mascot-emoji"><img src="jojo.jpg" alt="Jojo"></div>
                     <h3 class="mascot-name">Jojo</h3>
                     <span class="mascot-title-tag">The Snowy Guy</span>
                     <div class="mascot-stats">
@@ -1077,6 +1230,48 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <!-- Globe Distance Section -->
+        <section class="globe-section" id="distance">
+            <h2 class="section-title reveal">Our Distance</h2>
+            <p class="section-subtitle reveal">13,536 miles apart — yet our hearts are always close</p>
+
+            <div class="globe-container reveal">
+                <div id="globe-viz"></div>
+            </div>
+
+            <div class="distance-info reveal">
+                <div class="distance-card">
+                    <div class="distance-icon">🏝️</div>
+                    <div class="distance-place">
+                        <h4>Indonesia</h4>
+                        <p>Lolo's Island</p>
+                    </div>
+                </div>
+
+                <div class="distance-line">
+                    <div class="distance-dot"></div>
+                    <div class="distance-dash"></div>
+                    <div class="distance-value">13,536 miles</div>
+                    <div class="distance-dash"></div>
+                    <div class="distance-dot"></div>
+                </div>
+
+                <div class="distance-card">
+                    <div class="distance-icon">🏔️</div>
+                    <div class="distance-place">
+                        <h4>Slovenia</h4>
+                        <p>Jojo's Snow</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="distance-quote reveal">
+                <em>"But one thing I know — that I love him so much, although we're 13,536 miles far away."</em>
+            </p>
+
+            <p class="distance-date reveal">Indonesia — Slovenia, September 9th 2025</p>
         </section>
 
         <!-- Countdown Section -->
@@ -1570,10 +1765,123 @@
             return n + (s[(v - 20) % 10] || s[v] || s[0]);
         }
 
+        // ============ GLOBE.GL DISTANCE VISUALIZATION ============
+        let globeInstance = null;
+
+        function initGlobe() {
+            const container = document.getElementById('globe-viz');
+            if (!container || globeInstance) return;
+
+            // Indonesia (approx: Java) & Slovenia coordinates
+            const indonesia = { lat: -6.9, lng: 107.6, label: 'Indonesia 🏝️', color: '#E18E96' };
+            const slovenia  = { lat: 46.05, lng: 14.5,  label: 'Slovenia ❄️',  color: '#3182BD' };
+
+            // Arc data
+            const arcsData = [{
+                startLat: indonesia.lat,
+                startLng: indonesia.lng,
+                endLat: slovenia.lat,
+                endLng: slovenia.lng,
+                color: ['#E18E96', '#5da4d9']
+            }];
+
+            // Points data
+            const pointsData = [
+                { lat: indonesia.lat, lng: indonesia.lng, size: 0.8, color: '#E18E96', label: 'Indonesia' },
+                { lat: slovenia.lat,  lng: slovenia.lng,  size: 0.8, color: '#3182BD', label: 'Slovenia' }
+            ];
+
+            // Ring data (pulsing rings at locations)
+            const ringsData = [
+                { lat: indonesia.lat, lng: indonesia.lng, maxR: 3, propagationSpeed: 2, repeatPeriod: 1200, color: () => 'rgba(225, 142, 150, 0.6)' },
+                { lat: slovenia.lat,  lng: slovenia.lng,  maxR: 3, propagationSpeed: 2, repeatPeriod: 1200, color: () => 'rgba(49, 130, 189, 0.6)' }
+            ];
+
+            // Labels
+            const labelsData = [
+                { lat: indonesia.lat, lng: indonesia.lng, text: 'Lolo 🌺', color: '#E18E96', size: 1.5 },
+                { lat: slovenia.lat,  lng: slovenia.lng,  text: 'Jojo ❄️',  color: '#5da4d9', size: 1.5 }
+            ];
+
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+
+            globeInstance = Globe()
+                .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+                .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+                .backgroundImageUrl('')
+                .backgroundColor('rgba(0,0,0,0)')
+                .width(w)
+                .height(h)
+                .atmosphereColor('#5da4d9')
+                .atmosphereAltitude(0.2)
+                // Arcs
+                .arcsData(arcsData)
+                .arcColor('color')
+                .arcStroke(1.5)
+                .arcDashLength(0.4)
+                .arcDashGap(0.2)
+                .arcDashAnimateTime(2500)
+                .arcAltitudeAutoScale(0.4)
+                // Points
+                .pointsData(pointsData)
+                .pointColor('color')
+                .pointAltitude(0.01)
+                .pointRadius('size')
+                // Rings
+                .ringsData(ringsData)
+                .ringColor('color')
+                .ringMaxRadius('maxR')
+                .ringPropagationSpeed('propagationSpeed')
+                .ringRepeatPeriod('repeatPeriod')
+                // Labels
+                .labelsData(labelsData)
+                .labelText('text')
+                .labelSize('size')
+                .labelColor('color')
+                .labelDotRadius(0.4)
+                .labelAltitude(0.02)
+                .labelResolution(6)
+                (container);
+
+            // Set initial point of view (centered between the two)
+            globeInstance.pointOfView({ lat: 20, lng: 60, altitude: 2.2 }, 0);
+
+            // Auto-rotate
+            globeInstance.controls().autoRotate = true;
+            globeInstance.controls().autoRotateSpeed = 0.5;
+            globeInstance.controls().enableZoom = true;
+
+            // Handle resize
+            const resizeObserver = new ResizeObserver(() => {
+                globeInstance.width(container.clientWidth);
+                globeInstance.height(container.clientHeight);
+            });
+            resizeObserver.observe(container);
+        }
+
+        // Lazy-init globe when it scrolls into view
+        function setupGlobeObserver() {
+            const globeSection = document.getElementById('distance');
+            if (!globeSection) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        initGlobe();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            observer.observe(globeSection);
+        }
+
         // ============ INIT ============
         function initDashboard() {
             initReveal();
             initHeroCanvas();
+            setupGlobeObserver();
             updateCountdown();
             setInterval(updateCountdown, 1000);
         }
