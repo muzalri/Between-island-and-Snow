@@ -1640,7 +1640,7 @@
 
             /* Hero */
             .hero {
-                min-height: 80vh;
+                min-height: 100vh;
                 padding: 2rem 1.5rem;
             }
             .hero-deco-left, .hero-deco-right {
@@ -2189,10 +2189,12 @@
                     lockScreen.classList.add('unlocked');
                 }, 3200);
 
-                // Step 7 (4400ms): Show dashboard
+                // Step 7 (4400ms): Show dashboard & scroll to hero
                 setTimeout(() => {
                     lockScreen.classList.add('hidden');
                     dashboard.classList.add('visible');
+                    document.getElementById('hero-section').scrollIntoView({ behavior: 'instant' });
+                    window.scrollTo(0, 0);
                     initDashboard();
                     createFloatingElements();
                 }, 4400);
